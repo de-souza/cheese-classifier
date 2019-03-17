@@ -2,7 +2,7 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse, HTMLResponse, RedirectResponse
 from fastai.vision import (
     ImageDataBunch,
-    ConvLearner,
+    load_learner,
     open_image,
     get_transforms,
     models,
@@ -24,33 +24,7 @@ async def get_bytes(url):
 
 app = Starlette()
 
-cat_images_path = Path("/tmp")
-cat_fnames = [
-    "/{}_1.jpg".format(c)
-    for c in [
-        "Bobcat",
-        "Mountain-Lion",
-        "Domestic-Cat",
-        "Western-Bobcat",
-        "Canada-Lynx",
-        "North-American-Mountain-Lion",
-        "Eastern-Bobcat",
-        "Central-American-Ocelot",
-        "Ocelot",
-        "Jaguar",
-    ]
-]
-cat_data = ImageDataBunch.from_name_re(
-    cat_images_path,
-    cat_fnames,
-    r"/([^/]+)_\d+.jpg$",
-    ds_tfms=get_transforms(),
-    size=224,
-)
-cat_learner = ConvLearner(cat_data, models.resnet34)
-cat_learner.model.load_state_dict(
-    torch.load("usa-inaturalist-cats.pth", map_location="cpu")
-)
+learn = load_learner(".")
 
 
 @app.route("/upload", methods=["POST"])
@@ -68,14 +42,18 @@ async def classify_url(request):
 
 def predict_image_from_bytes(bytes):
     img = open_image(BytesIO(bytes))
-    losses = img.predict(cat_learner)
-    return JSONResponse({
-        "predictions": sorted(
-            zip(cat_learner.data.classes, map(float, losses)),
-            key=lambda p: p[1],
-            reverse=True
-        )
-    })
+
+    pred_class,pred_idx,outputs = learn.predict(img)
+
+    formatted_outputs = ["{:.1f}%".format(value) for value in [x * 100 for x in torch.nn.functional.softmax(outputs, dim=0)]]
+    pred_probs = sorted(
+        zip(learn.data.classes, map(str, formatted_outputs)),
+        key=lambda p: p[1],
+        reverse=True
+    )
+
+
+    return JSONResponse({"predictions": pred_probs})
 
 
 @app.route("/")
