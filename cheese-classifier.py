@@ -1,19 +1,12 @@
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse, HTMLResponse, RedirectResponse
-from fastai.vision import (
-    ImageDataBunch,
-    load_learner,
-    open_image,
-    get_transforms,
-    models,
-)
+from fastai.vision import open_image, load_learner
 import torch
 from pathlib import Path
 from io import BytesIO
 import sys
 import uvicorn
 import aiohttp
-import asyncio
 
 
 async def get_bytes(url):
