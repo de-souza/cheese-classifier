@@ -1,7 +1,7 @@
-FROM python:3.6-slim-stretch
+FROM python:3.6-slim
 
-RUN apt update
-RUN apt install -y python3-dev gcc
+RUN apt-get update
+RUN apt-get install -y python3-dev gcc
 
 # Install pytorch and fastai
 RUN pip install torch_nightly -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
@@ -11,7 +11,7 @@ RUN pip install fastai
 RUN pip install starlette uvicorn python-multipart aiohttp
 
 ADD cheese-classifier.py cheese-classifier.py
-ADD weights.pth weights.pth
+ADD export.pkl export.pkl
 
 # Run it once to trigger resnet download
 RUN python cheese-classifier.py
@@ -19,4 +19,4 @@ RUN python cheese-classifier.py
 EXPOSE 8008
 
 # Start the server
-CMD ["python", "cheese-clssifier.py", "serve"]
+CMD ["python", "cheese-classifier.py", "serve"]
