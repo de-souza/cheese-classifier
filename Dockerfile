@@ -13,10 +13,7 @@ RUN pip install starlette uvicorn python-multipart aiohttp
 ADD cheese-classifier.py cheese-classifier.py
 ADD export.pkl export.pkl
 
-# Run it once to trigger resnet download
-RUN python cheese-classifier.py
-
 EXPOSE 8008
 
 # Start the server
-CMD ["python", "cheese-classifier.py", "serve"]
+CMD ["python", "cheese-classifier.py"]
