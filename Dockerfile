@@ -10,10 +10,10 @@ RUN pip install fastai
 # Install starlette and uvicorn
 RUN pip install starlette uvicorn python-multipart aiohttp
 
-ADD cheese-classifier.py cheese-classifier.py
+ADD app.py app.py
 ADD export.pkl export.pkl
 
-EXPOSE 8008
+EXPOSE 8000
 
 # Start the server
-CMD ["python", "cheese-classifier.py"]
+CMD ["python", "app.py"]
