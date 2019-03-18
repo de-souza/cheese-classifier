@@ -26,7 +26,7 @@ def form(request):
           </head>
           <body>
             <h1>Cheese Classifier</h1>
-            <p>Select an image to upload:</p>
+            <p>Select image to upload:</p>
             <form action="/upload" method="post" enctype="multipart/form-data">
               <input type="file" name="file">
               <input type="submit" value="Upload Image">
@@ -75,8 +75,8 @@ def predict_image_from_bytes(bytes):
           </head>
           <body>
             <h1>Cheese Classifier</h1>
-            <p>Guess: {pred_class}</p>
-            <p>Results: {pred_probs}</p>
+            <p>Prediction: {pred_class}</p>
+            <p>Confidence: {pred_probs}</p>
           </body>
         </html>
         """
