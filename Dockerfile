@@ -11,7 +11,7 @@ RUN pip install fastai
 RUN pip install starlette uvicorn python-multipart aiohttp
 
 ADD app.py app.py
-ADD export.pkl export.pkl
+ADD data/export.pkl data/export.pkl
 
 EXPOSE 8000
 
