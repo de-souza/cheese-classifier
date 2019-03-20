@@ -10,7 +10,7 @@ from torch.nn.functional import softmax
 
 app = Starlette()
 
-learn = load_learner(".")
+learn = load_learner("data")
 
 
 @app.route("/")
@@ -60,9 +60,7 @@ def predict_image_from_bytes(bytes):
     pred_class, _, outputs = learn.predict(img)
     formatted_outputs = [f"{x:.1%}" for x in softmax(outputs, dim=0)]
     pred_probs = sorted(
-        zip(learn.data.classes, formatted_outputs),
-        key=lambda p: p[1],
-        reverse=True,
+        zip(learn.data.classes, formatted_outputs), key=lambda p: p[1], reverse=True
     )
     return HTMLResponse(
         f"""
