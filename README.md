@@ -1,4 +1,4 @@
-# cheese-classifier
+# Cheese Classifier
 
 Classify cheese with the help of the fastai library. Based on the [cougar-or-not](https://github.com/simonw/cougar-or-not) project by Simon Willison.
 
