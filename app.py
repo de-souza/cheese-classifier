@@ -18,26 +18,19 @@ def form(request):
     return HTMLResponse(
         """
         <!DOCTYPE html>
-        <html lang="en-gb">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Cheese Classifier</title>
-          </head>
-          <body>
-            <h1>Cheese Classifier</h1>
-            <p>Select image to upload:</p>
-            <form action="/upload" method="post" enctype="multipart/form-data">
-              <input type="file" name="file">
-              <input type="submit" value="Upload Image">
-            </form>
-            <p>Or submit a URL:</p>
-            <form action="/classify-url" method="get">
-              <input type="url" name="url">
-              <input type="submit" value="Fetch and analyze image">
-            </form>
-          </body>
-        </html>
+        <meta charset="utf-8">
+        <title>Cheese Classifier</title>
+        <h1>Cheese Classifier</h1>
+        <p>Select image to upload:
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload Image">
+        </form>
+        <p>Or submit a URL:
+        <form action="/classify-url" method="get">
+          <input type="url" name="url">
+          <input type="submit" value="Fetch and analyze image">
+        </form>
         """
     )
 
@@ -65,18 +58,11 @@ def predict_image_from_bytes(bytes):
     return HTMLResponse(
         f"""
         <!DOCTYPE html>
-        <html lang="en-gb">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Cheese Classifier</title>
-          </head>
-          <body>
-            <h1>Cheese Classifier</h1>
-            <p>Prediction: {pred_class}</p>
-            <p>Confidence: {pred_probs}</p>
-          </body>
-        </html>
+        <meta charset="utf-8">
+        <title>Cheese Classifier</title>
+        <h1>Cheese Classifier</h1>
+        <p>Prediction: <strong>{pred_class}</strong>
+        <p>Confidence: {pred_probs}
         """
     )
 
