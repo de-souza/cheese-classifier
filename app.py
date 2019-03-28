@@ -16,22 +16,21 @@ learn = load_learner("data")
 @app.route("/")
 def form(request):
     return HTMLResponse(
-        """
-        <!DOCTYPE html>
-        <meta charset="utf-8">
-        <title>Cheese Classifier</title>
-        <h1>Cheese Classifier</h1>
-        <p>Select image to upload:
-        <form action="/upload" method="post" enctype="multipart/form-data">
-          <input type="file" name="file">
-          <input type="submit" value="Upload Image">
-        </form>
-        <p>Or submit a URL:
-        <form action="/classify-url" method="get">
-          <input type="url" name="url">
-          <input type="submit" value="Fetch and analyze image">
-        </form>
-        """
+        "<!DOCTYPE html>\n"
+        '<html lang="en">\n'
+        '  <meta charset="utf-8">\n'
+        "  <title>Cheese Classifier</title>\n"
+        "  <h1>Cheese Classifier</h1>\n"
+        "  <p>Select image to upload:\n"
+        '  <form action="/upload" method="post" enctype="multipart/form-data">\n'
+        '    <input type="file" name="file">\n'
+        '    <input type="submit" value="Upload Image">\n'
+        "  </form>\n"
+        "  <p>Or submit a URL:\n"
+        '  <form action="/classify-url" method="get">\n'
+        '    <input type="url" name="url">\n'
+        '    <input type="submit" value="Fetch and analyze image">\n'
+        "  </form>"
     )
 
 
@@ -50,21 +49,25 @@ async def classify_url(request):
 
 def predict_image_from_bytes(bytes):
     img = open_image(BytesIO(bytes))
-    pred_class, _, outputs = learn.predict(img)
-    formatted_outputs = [f"{x:.1%}" for x in softmax(outputs, dim=0)]
-    pred_probs = sorted(
-        zip(learn.data.classes, formatted_outputs), key=lambda p: p[1], reverse=True
+    prediction, _, outputs = learn.predict(img)
+    html = (
+        "<!DOCTYPE html>\n"
+        '<html lang="en">\n'
+        '  <meta charset="utf-8">\n'
+        "  <title>Cheese Classifier</title>\n"
+        "  <h1>Cheese Classifier</h1>\n"
+        f"  <p>Prediction: <strong>{prediction}</strong>\n"
+        "  <p>Output:\n"
+        "  <table>\n"
     )
-    return HTMLResponse(
-        f"""
-        <!DOCTYPE html>
-        <meta charset="utf-8">
-        <title>Cheese Classifier</title>
-        <h1>Cheese Classifier</h1>
-        <p>Prediction: <strong>{pred_class}</strong>
-        <p>Confidence: {pred_probs}
-        """
-    )
+    for pred_class, pred_prob in zip(learn.data.classes, softmax(outputs, dim=0)):
+        html += (
+            "    <tr>\n"
+            f"      <th>{pred_class}\n"
+            f"      <td>{pred_prob:.1%}\n"
+        )
+    html += "  </table>"
+    return HTMLResponse(html)
 
 
 async def get_bytes(url):
