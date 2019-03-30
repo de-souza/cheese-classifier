@@ -3,12 +3,14 @@ from io import BytesIO
 import aiohttp
 import uvicorn
 from starlette.applications import Starlette
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.responses import HTMLResponse
 from fastai.vision import load_learner, open_image
 from torch.nn.functional import softmax
 
 
 app = Starlette()
+app.add_middleware(HTTPSRedirectMiddleware)
 
 learn = load_learner("data")
 
