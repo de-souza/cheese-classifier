@@ -57,7 +57,7 @@ def predict_image_from_bytes(bytes):
         "  <title>Cheese Classifier</title>\n"
         "  <h1>Cheese Classifier</h1>\n"
         f"  <p>Prediction: <strong>{prediction}</strong>\n"
-        "  <p>Output:\n"
+        "  <p>Probability distribution:\n"
         "  <table>\n"
     )
     for pred_class, pred_prob in zip(learn.data.classes, softmax(outputs, dim=0)):
