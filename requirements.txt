@@ -1,0 +1,5 @@
+fastai==1.0.57
+starlette==0.12.8
+uvicorn==0.8.6
+python-multipart==0.0.5
+aiohttp==3.5.4
